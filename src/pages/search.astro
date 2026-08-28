@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BackLink from '../components/BackLink.astro';
+---
+
+<BaseLayout title="Search">
+  <BackLink href="/" label="Home" />
+  <h1 class="page-title">Search</h1>
+  <div id="search"></div>
+  <p id="search-dev-note" hidden>
+    Search only works on the built site. Run <code>npm run build</code> then
+    <code>npm run preview</code> to try it (it works automatically once deployed).
+  </p>
+
+  <!--
+    Search is powered by Pagefind (https://pagefind.app). It indexes the site
+    during "npm run build", so the /pagefind/ files below only exist in the
+    built site — in the dev server we show a friendly note instead.
+  -->
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  <script is:inline>
+    const script = document.createElement('script');
+    script.src = '/pagefind/pagefind-ui.js';
+    script.onload = () => {
+      new PagefindUI({ element: '#search', showSubResults: true, autofocus: true });
+    };
+    script.onerror = () => {
+      document.getElementById('search-dev-note').hidden = false;
+    };
+    document.head.appendChild(script);
+  </script>
+</BaseLayout>
+
+<style>
+  /* Make the Pagefind widget match the site's colours. */
+  #search {
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--card);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-border-radius: var(--radius);
+    --pagefind-ui-font: inherit;
+  }
+</style>

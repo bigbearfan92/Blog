@@ -1,0 +1,23 @@
+---
+import type { PaginateFunction } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Pager from '../components/Pager.astro';
+import { getPublishedPosts } from '../lib/posts';
+
+// The homepage, split into pages of ten posts: /, /2/, /3/, …
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  const posts = await getPublishedPosts();
+  return paginate(posts, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout>
+  <h1 class="visually-hidden">Posts</h1>
+  <ul class="post-list">
+    {page.data.map((post) => <PostCard post={post} />)}
+  </ul>
+  <Pager page={page} />
+</BaseLayout>

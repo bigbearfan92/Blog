@@ -1,0 +1,11 @@
+---
+// A little "← back to wherever" wayfinding link, shown at the top of a page.
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<p class="back-link"><a href={href}>← {label}</a></p>

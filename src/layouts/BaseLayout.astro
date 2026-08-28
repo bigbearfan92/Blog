@@ -1,0 +1,63 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION, PASSWORD_HASH } from '../site.config.mjs';
+import PasswordGate from '../components/PasswordGate.astro';
+import Sidebar from '../components/Sidebar.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE_DESCRIPTION } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Private blog: ask search engines not to index it. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <!--
+      Password gate, part 1 (runs before the page paints).
+      If this browser has already unlocked the blog with the correct password,
+      mark the page as unlocked so the content shows and the gate stays hidden.
+    -->
+    <script is:inline define:vars={{ PASSWORD_HASH }}>
+      try {
+        if (localStorage.getItem('blog-unlocked') === PASSWORD_HASH) {
+          document.documentElement.classList.add('unlocked');
+        }
+      } catch {
+        /* localStorage unavailable (rare) — the gate will simply show. */
+      }
+    </script>
+  </head>
+  <body>
+    <PasswordGate />
+
+    <div class="site">
+      <header class="site-header">
+        <a class="site-title" href="/">{SITE_TITLE}</a>
+        <nav class="site-nav">
+          <a href="/">Posts</a>
+          <a href="/search/">Search</a>
+        </nav>
+      </header>
+
+      <div class="site-body">
+        <main class="site-main">
+          <slot />
+        </main>
+        <Sidebar />
+      </div>
+
+      <footer class="site-footer">
+        <p>You can put something in this footer, or just delete it.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackLink from '../../components/BackLink.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPublishedPosts, slugifyTerm, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const byCategory = new Map<string, { category: string; posts: Post[] }>();
+  for (const post of posts) {
+    const slug = slugifyTerm(post.data.category);
+    const entry = byCategory.get(slug) ?? { category: post.data.category, posts: [] };
+    entry.posts.push(post);
+    byCategory.set(slug, entry);
+  }
+  return [...byCategory.entries()].map(([slug, { category, posts }]) => ({
+    params: { category: slug },
+    props: { category, posts },
+  }));
+}
+
+const { category, posts } = Astro.props;
+---
+
+<BaseLayout title={`Posts in “${category}”`}>
+  <BackLink href="/categories/" label="All categories" />
+  <h1 class="page-title">{category}</h1>
+  <ul class="post-list">
+    {posts.map((post) => <PostCard post={post} />)}
+  </ul>
+</BaseLayout>

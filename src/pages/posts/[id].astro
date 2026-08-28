@@ -1,0 +1,63 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackLink from '../../components/BackLink.astro';
+import { getAllPosts, formatDate, slugifyTerm } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  // Drafts get a page too, so they can be previewed with ?preview —
+  // but they never appear in lists, tag/category pages, or search.
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, category, tags, draft } = post.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <!--
+    Draft protection: a draft page redirects home unless the URL has ?preview.
+    Share a draft with yourself as /posts/my-post/?preview
+  -->
+  {
+    draft && (
+      <script is:inline>
+        if (!new URLSearchParams(location.search).has('preview')) {
+          location.replace('/');
+        }
+      </script>
+    )
+  }
+
+  <BackLink href="/" label="All posts" />
+
+  <article data-pagefind-body={draft ? undefined : ''}>
+    {draft && <p class="draft-banner">Draft preview — this post is not published yet.</p>}
+
+    <header class="post-header">
+      <div class="post-meta">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        <span>·</span>
+        <a class="category-pill" href={`/categories/${slugifyTerm(category)}/`}>{category}</a>
+      </div>
+      <h1>{title}</h1>
+      {
+        tags.length > 0 && (
+          <ul class="tag-list">
+            {tags.map((tag) => (
+              <li>
+                <a class="tag" href={`/tags/${slugifyTerm(tag)}/`}>#{tag}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="post-body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,522 @@
+/* ===========================================================================
+   Blog styles — this file is yours to play with!
+   Change a value, save, and the browser refreshes automatically (npm run dev).
+   =========================================================================== */
+
+/* ---- Colours & sizing knobs ----------------------------------------------
+   All the main colours live here. Change these first — the rest of the file
+   uses them via var(--name). */
+:root {
+  --bg: #faf9f7; /* page background */
+  --text: #2b2b2b; /* main text colour */
+  --muted: #6b6b6b; /* dates, footer, less important text */
+  --accent: #7c5cbf; /* links, buttons, highlights */
+  --accent-soft: #efeaf9; /* tag pills, subtle backgrounds */
+  --card: #ffffff; /* card backgrounds */
+  --border: #e6e2dc; /* thin lines */
+
+  --content-width: 42rem; /* how wide the text column is */
+  --sidebar-width: 15rem; /* how wide the sidebar is */
+  --radius: 0px; /* how rounded corners are */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Charter, Georgia, "Times New Roman", serif;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+/* Headings and UI bits use a sans-serif font for contrast. */
+h1,
+h2,
+h3,
+h4,
+.site-nav,
+.site-title,
+.tag,
+.category-pill,
+button,
+input {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* ---- Page frame ---------------------------------------------------------- */
+.site {
+  /* content column + gap + sidebar */
+  max-width: calc(var(--content-width) + 2.5rem + var(--sidebar-width));
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+/* Main column and sidebar, side by side. */
+.site-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--sidebar-width);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* On narrow screens the sidebar drops below the posts. */
+@media (max-width: 820px) {
+  .site-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-nav a:hover {
+  color: var(--accent);
+}
+
+.site-footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---- Post lists ---------------------------------------------------------- */
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.post-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  overflow: hidden; /* clips the cover image to the rounded corners */
+}
+
+/* Cover image: full-bleed across the top of the card. */
+.post-cover {
+  display: block;
+  margin: -1.25rem -1.5rem 1.25rem;
+}
+
+.post-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9; /* keeps every card the same shape; crops to fit */
+  object-fit: cover;
+}
+
+.post-card h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+}
+
+.post-card h2 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-card h2 a:hover {
+  color: var(--accent);
+}
+
+.post-card p {
+  margin: 0.5rem 0 0;
+}
+
+/* The preview text shown above the cut on listing pages. */
+.post-excerpt {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.post-excerpt > :first-child {
+  margin-top: 0;
+}
+
+.post-excerpt > :last-child {
+  margin-bottom: 0;
+}
+
+/* Keep any headings inside a preview modest so they don't fight the title. */
+.post-excerpt h1,
+.post-excerpt h2,
+.post-excerpt h3 {
+  font-size: 1.05rem;
+}
+
+.read-more {
+  margin: 0.75rem 0 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.9rem;
+}
+
+.read-more a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.read-more a:hover {
+  text-decoration: underline;
+}
+
+.post-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ---- Tags & categories --------------------------------------------------- */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  list-style: none;
+}
+
+.tag,
+.category-pill {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 0.1rem 0.7rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.tag:hover,
+.category-pill:hover {
+  filter: brightness(0.95);
+}
+
+/* ---- Single post --------------------------------------------------------- */
+.post-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  line-height: 1.25;
+}
+
+.post-body {
+  margin-top: 2rem;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.post-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+  font-style: italic;
+}
+
+.post-body pre {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.post-body code {
+  font-size: 0.95em;
+}
+
+.draft-banner {
+  background: #fff3cd;
+  border: 1px solid #f0dc9a;
+  color: #7a5d00;
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.9rem;
+}
+
+/* ---- Sidebar ------------------------------------------------------------- */
+.sidebar {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.95rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.widget {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.widget h2 {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.widget h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.widget h2 a:hover {
+  color: var(--accent);
+}
+
+.widget-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.widget-list a {
+  text-decoration: none;
+}
+
+.widget-list a:hover {
+  text-decoration: underline;
+}
+
+.widget .count {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.widget .tag-list {
+  margin: 0;
+}
+
+.widget-about {
+  text-align: center;
+}
+
+.widget-about .avatar {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.widget-about h2 {
+  font-size: 1.05rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.widget-about p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ---- Pager (older/newer links under the post list) ----------------------- */
+.pager {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.95rem;
+}
+
+.pager a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pager a:hover {
+  text-decoration: underline;
+}
+
+.pager-status {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ---- Archive index page --------------------------------------------------- */
+.archive-year h2 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.archive-year .count {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+/* ---- Password gate ------------------------------------------------------- */
+/* Content stays hidden until the <html> element gains the "unlocked" class. */
+html:not(.unlocked) .site {
+  display: none;
+}
+
+html.unlocked .gate {
+  display: none;
+}
+
+.gate {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 1.25rem;
+}
+
+.gate-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 22rem;
+  width: 100%;
+  text-align: center;
+}
+
+.gate-card h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+}
+
+.gate-card p {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.gate-card input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.gate-card button {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.gate-card button:hover {
+  filter: brightness(1.1);
+}
+
+.gate-error {
+  color: #b3261e;
+  margin-top: 0.75rem;
+}
+
+/* ---- Helpers ------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.page-title {
+  margin: 0 0 1.5rem;
+  font-size: 1.75rem;
+}
+
+/* The "← back to wherever" link at the top of a page. */
+.back-link {
+  margin: 0 0 1rem;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+}
+
+.back-link a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* ---- Small screens ------------------------------------------------------- */
+@media (max-width: 480px) {
+  body {
+    font-size: 1.05rem;
+  }
+
+  .post-header h1 {
+    font-size: 1.6rem;
+  }
+}

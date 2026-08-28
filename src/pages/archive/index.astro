@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackLink from '../../components/BackLink.astro';
+import { getArchiveMonths, type ArchiveMonth } from '../../lib/posts';
+
+const months = await getArchiveMonths();
+
+// Group the months by year for a tidy, old-fashioned archive page.
+const years = new Map<string, ArchiveMonth[]>();
+for (const month of months) {
+  const list = years.get(month.year) ?? [];
+  list.push(month);
+  years.set(month.year, list);
+}
+---
+
+<BaseLayout title="Archives">
+  <BackLink href="/" label="Home" />
+  <h1 class="page-title">Archives</h1>
+  {
+    [...years.entries()].map(([year, yearMonths]) => (
+      <section class="archive-year">
+        <h2>{year}</h2>
+        <ul class="widget-list">
+          {yearMonths.map(({ month, label, posts }) => (
+            <li>
+              <a href={`/archive/${year}/${month}/`}>{label}</a>{' '}
+              <span class="count">({posts.length})</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>

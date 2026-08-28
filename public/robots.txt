@@ -1,0 +1,3 @@
+# Private blog - ask crawlers to stay away entirely.
+User-agent: *
+Disallow: /

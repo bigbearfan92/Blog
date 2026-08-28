@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BackLink from '../../../components/BackLink.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { getArchiveMonths } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const months = await getArchiveMonths();
+  return months.map(({ year, month, label, posts }) => ({
+    params: { year, month },
+    props: { label, posts },
+  }));
+}
+
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout title={label}>
+  <BackLink href="/archive/" label="All archives" />
+  <h1 class="page-title">{label}</h1>
+  <ul class="post-list">
+    {posts.map((post) => <PostCard post={post} />)}
+  </ul>
+</BaseLayout>

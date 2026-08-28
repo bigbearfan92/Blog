@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Placeholder avatar: a smiling face">
+  <rect width="200" height="200" fill="#efeaf9"/>
+  <circle cx="100" cy="82" r="38" fill="#7c5cbf"/>
+  <path d="M40 200 Q 40 130 100 130 T 160 200 Z" fill="#7c5cbf"/>
+  <circle cx="86" cy="76" r="5" fill="#efeaf9"/>
+  <circle cx="114" cy="76" r="5" fill="#efeaf9"/>
+  <path d="M84 94 Q 100 106 116 94" stroke="#efeaf9" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

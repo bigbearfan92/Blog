@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import { formatDate, slugifyTerm, type Post } from '../lib/posts';
+import { getPreview } from '../lib/excerpt';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, date, category, tags, image, imageAlt } = post.data;
+const preview = getPreview(post);
+---
+
+<li class="post-card">
+  {
+    image && (
+      <a class="post-cover" href={`/posts/${post.id}/`} tabindex="-1">
+        <Image src={image} alt={imageAlt ?? ''} width={1200} />
+      </a>
+    )
+  }
+  <div class="post-meta">
+    <time datetime={date.toISOString()}>{formatDate(date)}</time>
+    <span>·</span>
+    <a class="category-pill" href={`/categories/${slugifyTerm(category)}/`}>{category}</a>
+  </div>
+  <h2><a href={`/posts/${post.id}/`}>{title}</a></h2>
+  {preview.html && <div class="post-excerpt" set:html={preview.html} />}
+  {
+    preview.hasMore && (
+      <p class="read-more">
+        <a href={`/posts/${post.id}/`}>Keep reading →</a>
+      </p>
+    )
+  }
+  {
+    tags.length > 0 && (
+      <ul class="tag-list">
+        {tags.map((tag) => (
+          <li>
+            <a class="tag" href={`/tags/${slugifyTerm(tag)}/`}>#{tag}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</li>

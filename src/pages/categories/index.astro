@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackLink from '../../components/BackLink.astro';
+import { getPublishedPosts, slugifyTerm } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+const counts = new Map<string, { category: string; count: number }>();
+for (const post of posts) {
+  const key = slugifyTerm(post.data.category);
+  const entry = counts.get(key) ?? { category: post.data.category, count: 0 };
+  entry.count += 1;
+  counts.set(key, entry);
+}
+const categories = [...counts.entries()].sort((a, b) => b[1].count - a[1].count);
+---
+
+<BaseLayout title="Categories">
+  <BackLink href="/" label="Home" />
+  <h1 class="page-title">Categories</h1>
+  <ul class="tag-list">
+    {
+      categories.map(([slug, { category, count }]) => (
+        <li>
+          <a class="category-pill" href={`/categories/${slug}/`}>{category} ({count})</a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import type { Page } from 'astro';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  page: Page<Post>;
+}
+
+const { page } = Astro.props;
+---
+
+{
+  page.lastPage > 1 && (
+    <nav class="pager" aria-label="More posts">
+      {page.url.prev ? <a href={page.url.prev}>← Newer posts</a> : <span />}
+      <span class="pager-status">
+        Page {page.currentPage} of {page.lastPage}
+      </span>
+      {page.url.next ? <a href={page.url.next}>Older posts →</a> : <span />}
+    </nav>
+  )
+}
