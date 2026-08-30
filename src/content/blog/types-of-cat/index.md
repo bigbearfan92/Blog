@@ -6,6 +6,8 @@ image: ./Rip-jethro.png
 tags:
   - test
   - cats 
+draft: true 
+
 ---
 
 This is another test post about types of cats.
