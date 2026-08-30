@@ -5,6 +5,7 @@ category: Blog
 tags:
   - meta
   - hello
+draft: true 
 ---
 
 Hello! This is the first post. It exists mostly so you can see what a post looks like — feel free to edit it or delete it.
