@@ -2,6 +2,7 @@
 title: Types of Cat
 date: 2026-08-30
 category: Blog
+image: ./Rip-jethro.png
 tags:
   - test
   - cats 
