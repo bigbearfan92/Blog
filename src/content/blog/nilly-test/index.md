@@ -12,8 +12,7 @@ Hello :3 This is a test post
 <!--more-->
 
 This is a test- I don't have anything funny to type :(
-
-    Below are markdown codes for big writing. Big writing can also be exchanged for headlines. They start with hashtags. 
+Below are markdown codes for big writing. Big writing can also be exchanged for headlines. They start with hashtags. 
 
 ##### This has five hashtage
 #### This has four hashtage
