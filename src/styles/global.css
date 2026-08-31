@@ -244,6 +244,14 @@ a {
   line-height: 1.25;
 }
 
+/* The cover image from the frontmatter, shown under the post's title. */
+.post-hero {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1.5rem;
+}
+
 .post-body {
   margin-top: 2rem;
 }
